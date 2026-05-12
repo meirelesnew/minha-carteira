@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meireles — Jornada Financeira</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde:#00C896; --verde-escuro:#00A07A; --amarelo:#FFD166;
+  --fundo:#0A0F0D; --fundo2:#111816; --fundo3:#182420;
+  --borda:rgba(0,200,150,0.15); --texto:#E8F5F0; --texto2:#7AA898;
+  --fonte-titulo:'Syne',sans-serif; --fonte-mono:'DM Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+body{background:var(--fundo);color:var(--texto);font-family:var(--fonte-mono);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,200,150,0.03) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,200,150,0.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,200,150,0.08) 0%,transparent 70%);
+  pointer-events:none;z-index:0;}
+.container{max-width:900px;margin:0 auto;padding:0 20px;position:relative;z-index:1;}
+header{padding:60px 0 40px;border-bottom:1px solid var(--borda);}
+.tag{display:inline-block;font-size:11px;letter-spacing:0.15em;color:var(--verde);
+  text-transform:uppercase;border:1px solid var(--borda);padding:4px 12px;
+  border-radius:2px;margin-bottom:24px;}
+h1{font-family:var(--fonte-titulo);font-size:clamp(36px,8vw,72px);font-weight:800;
+  line-height:1;letter-spacing:-0.02em;margin-bottom:16px;}
+h1 span{color:var(--verde);}
+.subtitulo{font-size:14px;color:var(--texto2);line-height:1.7;max-width:500px;}
+.meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+.chip{font-size:11px;color:var(--texto2);border:1px solid var(--borda);
+  padding:4px 10px;border-radius:2px;letter-spacing:0.05em;}
+.chip.ativo{color:var(--verde);border-color:rgba(0,200,150,0.3);}
+section{padding:48px 0;border-bottom:1px solid var(--borda);}
+section:last-child{border-bottom:none;}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+.section-num{font-size:11px;color:var(--verde);letter-spacing:0.1em;}
+h2{font-family:var(--fonte-titulo);font-size:22px;font-weight:700;letter-spacing:-0.01em;}
+.numeros-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1px;background:var(--borda);border:1px solid var(--borda);border-radius:4px;overflow:hidden;}
+.numero-item{background:var(--fundo2);padding:28px 24px;}
+.numero-label{font-size:11px;color:var(--texto2);letter-spacing:0.08em;margin-bottom:8px;}
+.numero-valor{font-family:var(--fonte-titulo);font-size:32px;font-weight:800;
+  letter-spacing:-0.02em;line-height:1;}
+.numero-valor.verde{color:var(--verde);} .numero-valor.amarelo{color:var(--amarelo);}
+.numero-sub{font-size:11px;color:var(--texto2);margin-top:6px;}
+.metas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+.meta-card{background:var(--fundo2);border:1px solid var(--borda);border-radius:4px;
+  padding:24px;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.meta-card:hover{border-color:rgba(0,200,150,0.4);}
+.meta-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--verde);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+.meta-card:hover::before{transform:scaleX(1);}
+.meta-icone{font-size:28px;margin-bottom:12px;}
+.meta-titulo{font-family:var(--fonte-titulo);font-size:15px;font-weight:700;margin-bottom:8px;}
+.meta-desc{font-size:12px;color:var(--texto2);line-height:1.6;margin-bottom:16px;}
+.barra-labels{display:flex;justify-content:space-between;font-size:11px;
+  color:var(--texto2);margin-bottom:6px;}
+.barra-labels span:last-child{color:var(--verde);}
+.barra{height:4px;background:var(--fundo3);border-radius:2px;overflow:hidden;}
+.barra-fill{height:100%;background:linear-gradient(90deg,var(--verde-escuro),var(--verde));
+  border-radius:2px;}
+.caixinha-card{background:var(--fundo2);border:1px solid var(--borda);border-radius:4px;
+  padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}
+@media(max-width:600px){.caixinha-card{grid-template-columns:1fr;}}
+.caixinha-valor{font-family:var(--fonte-titulo);font-size:48px;font-weight:800;
+  color:var(--verde);letter-spacing:-0.03em;line-height:1;}
+.caixinha-meta{font-size:12px;color:var(--texto2);margin-top:8px;}
+.barra-grande{height:8px;background:var(--fundo3);border-radius:4px;overflow:hidden;margin:16px 0 8px;}
+.barra-grande-fill{height:100%;background:linear-gradient(90deg,var(--verde-escuro),var(--verde));
+  border-radius:4px;width:12.5%;}
+.caixinha-pct{font-family:var(--fonte-titulo);font-size:13px;color:var(--verde);}
+.caixinha-info{font-size:12px;color:var(--texto2);line-height:1.8;}
+.table-wrap{background:var(--fundo2);border:1px solid var(--borda);border-radius:4px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--fundo3);}
+th{font-size:10px;letter-spacing:0.12em;color:var(--texto2);text-transform:uppercase;
+  padding:12px 16px;text-align:left;font-weight:400;}
+td{font-size:13px;padding:14px 16px;border-top:1px solid var(--borda);color:var(--texto);}
+tr:hover td{background:rgba(0,200,150,0.03);}
+.ticker{font-family:var(--fonte-titulo);font-weight:700;font-size:14px;color:var(--verde);}
+.badge-setor{font-size:10px;padding:2px 8px;border-radius:2px;background:var(--fundo3);
+  color:var(--texto2);border:1px solid var(--borda);}
+.positivo{color:var(--verde);}
+.freelas-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.freelas-grid{grid-template-columns:1fr;}}
+.freela-card{background:var(--fundo2);border:1px solid var(--borda);border-radius:4px;padding:20px;}
+.freela-titulo{font-size:11px;color:var(--texto2);letter-spacing:0.08em;margin-bottom:8px;}
+.freela-valor{font-family:var(--fonte-titulo);font-size:24px;font-weight:700;color:var(--amarelo);}
+.freela-desc{font-size:11px;color:var(--texto2);margin-top:6px;line-height:1.6;}
+.atualizado{display:inline-flex;align-items:center;gap:6px;font-size:11px;
+  color:var(--texto2);margin-top:16px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--verde);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+footer{padding:40px 0;text-align:center;font-size:12px;color:var(--texto2);line-height:1.8;}
+footer a{color:var(--verde);text-decoration:none;}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s,transform 0.6s;}
+.fade-in.visivel{opacity:1;transform:translateY(0);}
+.sobra-positivo{color:var(--verde);} .sobra-negativo{color:#ff6b6b;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="fade-in">
+  <div class="tag">// jornada financeira real</div>
+  <h1>Meireles<br><span>Construindo</span><br>Patrimônio</h1>
+  <p class="subtitulo">
+    Transporte escolar + Técnico em Eletrotécnica.<br>
+    R$ 100,00/mês investidos com consistência. Esposa + 2 filhos. Casa própria quitada.
+    Sem enrolação — números reais, metas reais.
+  </p>
+  <div class="meta-chips">
+    <span class="chip">Duque de Caxias / RJ</span>
+    <span class="chip ativo">⚡ Em transição de carreira</span>
+    <span class="chip">Iniciado Mai/2026</span>
+  </div>
+  <div class="atualizado">
+    <div class="dot-live"></div>
+    Atualizado em Maio/2026 — orientado pelo Claude (Anthropic)
+  </div>
+</header>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">01 —</span><h2>Visão Geral</h2></div>
+  <div class="numeros-grid">
+    <div class="numero-item">
+      <div class="numero-label">Patrimônio total</div>
+      <div class="numero-valor verde">R$ 1.297,16</div>
+      <div class="numero-sub">ações + FIIs</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Rentabilidade ações</div>
+      <div class="numero-valor verde">+46.1%</div>
+      <div class="numero-sub">carteira consolidada</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Dividendos / mês</div>
+      <div class="numero-valor amarelo">R$ 6,60</div>
+      <div class="numero-sub">renda passiva atual</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Aporte mensal</div>
+      <div class="numero-valor">R$ 100,00</div>
+      <div class="numero-sub">consistente todo mês</div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">02 —</span><h2>Metas</h2></div>
+  <div class="metas-grid">
+    <div class="meta-card">
+      <div class="meta-icone">🚗</div>
+      <div class="meta-titulo">Reserva do Carro</div>
+      <div class="meta-desc">Proteger minha ferramenta de trabalho. Sem carro, sem renda.</div>
+      <div class="barra-labels"><span>R$ 100,00</span><span>R$ 800,00</span></div>
+      <div class="barra"><div class="barra-fill" style="width:12.5%"></div></div>
+    </div>
+    <div class="meta-card">
+      <div class="meta-icone">📈</div>
+      <div class="meta-titulo">100 cotas MXRF11</div>
+      <div class="meta-desc">FII de papel com dividendos mensais. Base da renda passiva.</div>
+      <div class="barra-labels"><span>59 cotas</span><span>100 cotas</span></div>
+      <div class="barra"><div class="barra-fill" style="width:59.0%"></div></div>
+    </div>
+    <div class="meta-card">
+      <div class="meta-icone">👨‍👩‍👧‍👦</div>
+      <div class="meta-titulo">Estabilidade Familiar</div>
+      <div class="meta-desc">Esposa + 2 filhos. Casa própria quitada. Construindo segurança.</div>
+      <div class="barra-labels"><span>Em construção</span><span>Longo prazo</span></div>
+      <div class="barra"><div class="barra-fill" style="width:15%"></div></div>
+    </div>
+    <div class="meta-card">
+      <div class="meta-icone">🏖️</div>
+      <div class="meta-titulo">Aposentadoria</div>
+      <div class="meta-desc">R$ 1.000/mês em dividendos. Patrimônio necessário: R$ 120.000.</div>
+      <div class="barra-labels"><span>R$ 1.297,16</span><span>R$ 120.000</span></div>
+      <div class="barra"><div class="barra-fill" style="width:1.1%"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">03 —</span><h2>Caixinha do Carro</h2></div>
+  <div class="caixinha-card">
+    <div>
+      <div class="caixinha-valor">R$ 100,00</div>
+      <div class="caixinha-meta">Meta: R$ 800,00 — Mercado Pago</div>
+      <div class="barra-grande"><div class="barra-grande-fill"></div></div>
+      <div class="caixinha-pct">12.5% concluído</div>
+    </div>
+    <div class="caixinha-info">
+      Protege contra manutenções inesperadas.<br>
+      Todo freela de elétrica vai direto aqui<br>
+      até fechar R$ 800,00.<br><br>
+      <span style="color:var(--verde)">Previsão: Dez/2026</span>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">04 —</span><h2>Carteira</h2></div>
+  <p style="font-size:12px;color:var(--texto2);margin-bottom:16px">FIIs — Fundos Imobiliários</p>
+  <div class="table-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th>Ativo</th><th>Qtd</th><th>P. Médio</th><th>Dividendos/mês</th><th>Meta</th></tr></thead>
+      <tbody>
+          <tr>
+            <td><span class="ticker">MXRF11</span></td>
+            <td>59</td>
+            <td>R$ 9,93</td>
+            <td class="positivo">~R$ 5,90</td>
+            <td><span style="color:var(--amarelo)">59/100</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">GARE11</span></td>
+            <td>7</td>
+            <td>R$ 9,10</td>
+            <td class="positivo">~R$ 0,70</td>
+            <td><span >Manter</span></td>
+          </tr></tbody>
+    </table>
+  </div>
+  <p style="font-size:12px;color:var(--texto2);margin-bottom:16px">Ações — Status: manter, não aportar</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ativo</th><th>Qtd</th><th>P. Médio</th><th>Setor</th></tr></thead>
+      <tbody>
+          <tr>
+            <td><span class="ticker">KLBN4</span></td>
+            <td>29</td>
+            <td>R$ 4,38</td>
+            <td><span class="badge-setor">Papel/Celulose</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">ITSA4</span></td>
+            <td>11</td>
+            <td>R$ 9,92</td>
+            <td><span class="badge-setor">Financeiro</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">BBAS3</span></td>
+            <td>3</td>
+            <td>R$ 25,96</td>
+            <td><span class="badge-setor">Financeiro</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">EGIE3</span></td>
+            <td>4</td>
+            <td>R$ 32,28</td>
+            <td><span class="badge-setor">Energia</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">BBSE3</span></td>
+            <td>2</td>
+            <td>R$ 33,26</td>
+            <td><span class="badge-setor">Seguros</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">TAEE11</span></td>
+            <td>2</td>
+            <td>R$ 33,99</td>
+            <td><span class="badge-setor">Energia</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">WEGE3</span></td>
+            <td>1</td>
+            <td>R$ 35,21</td>
+            <td><span class="badge-setor">Industrial</span></td>
+          </tr></tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--texto2);margin-top:12px">
+    Rentabilidade: <span class="positivo">+46.1%</span>
+    &nbsp;|&nbsp; Valor: R$ 647,59
+  </p>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">05 —</span><h2>Orçamento Mensal</h2></div>
+  <div class="numeros-grid">
+    <div class="numero-item">
+      <div class="numero-label">Renda escolar</div>
+      <div class="numero-valor">R$ 2.500,00</div>
+      <div class="numero-sub">mensal</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Freelas elétrica</div>
+      <div class="numero-valor ">R$ 0,00</div>
+      <div class="numero-sub">Em construção</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Gastos (cartão)</div>
+      <div class="numero-valor">R$ 2.400,00</div>
+      <div class="numero-sub">pago total todo mês ✅</div>
+    </div>
+    <div class="numero-item">
+      <div class="numero-label">Sobra real</div>
+      <div class="numero-valor verde" style="">R$ 0,00</div>
+      <div class="numero-sub">após investimento</div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">06 —</span><h2>Freelas de Elétrica ⚡</h2></div>
+  <div class="freelas-grid">
+    <div class="freela-card">
+      <div class="freela-titulo">FATURADO EM 2026</div>
+      <div class="freela-valor">R$ 0,00</div>
+      <div class="freela-desc">Canal: WhatsApp.<br>Meta: 2 serviços/fim de semana.</div>
+    </div>
+    <div class="freela-card">
+      <div class="freela-titulo">POTENCIAL MENSAL</div>
+      <div class="freela-valor">R$ 400+</div>
+      <div class="freela-desc">Com 2-4 serviços/mês.<br>Técnico em Eletrotécnica formado.</div>
+    </div>
+    <div class="freela-card">
+      <div class="freela-titulo">SERVIÇOS REALIZADOS</div>
+      <div class="freela-valor">0</div>
+      <div class="freela-desc">Primeiro serviço vai direto<br>para a caixinha do carro.</div>
+    </div>
+    <div class="freela-card">
+      <div class="freela-titulo">IMPACTO NO PLANO</div>
+      <div class="freela-valor" style="font-size:18px;color:var(--verde)">3× mais rápido</div>
+      <div class="freela-desc">Com R$ 400/mês extra,<br>metas chegam 3x antes.</div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-header"><span class="section-num">07 —</span><h2>Histórico</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Mês</th><th>Caixinha</th><th>Saldo</th>
+          <th>MXRF11</th><th>Freelas</th><th>Nota</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td>Mai/2026</td>
+            <td>R$ 100,00</td>
+            <td>R$ 100,00</td>
+            <td>59 cotas</td>
+            <td>R$ 0,00</td>
+            <td style="color:var(--texto2);font-size:11px">Caixinha criada. Estratégia definida com Claude.</td>
+          </tr></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="fade-in">
+  <p>Esta é uma jornada real — sem filtro, sem perfumaria.</p>
+  <p style="margin-top:8px">
+    Orientado pelo <a href="https://claude.ai" target="_blank">Claude</a> (Anthropic)
+    &nbsp;·&nbsp; Duque de Caxias / RJ
+    &nbsp;·&nbsp; <a href="https://github.com/meirelesnew/minha-carteira" target="_blank">GitHub</a>
+  </p>
+  <p style="margin-top:16px;font-size:10px;opacity:0.5">
+    Não é recomendação de investimento. São escolhas pessoais documentadas publicamente.
+  </p>
+</footer>
+
+</div>
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visivel'), i*80);
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

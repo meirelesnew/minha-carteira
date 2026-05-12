@@ -1,0 +1,63 @@
+{
+  "perfil": {
+    "nome": "Meireles",
+    "cidade": "Duque de Caxias / RJ",
+    "profissao": "Transporte escolar + Técnico em Eletrotécnica",
+    "aporte_mensal": 100.00,
+    "familia": "Esposa + 2 filhos",
+    "inicio": "Mai/2026"
+  },
+
+  "ultima_atualizacao": "Maio/2026",
+
+  "caixinha": {
+    "saldo": 100.00,
+    "meta": 800.00,
+    "onde": "Mercado Pago",
+    "previsao": "Dez/2026"
+  },
+
+  "carteira_fiis": [
+    { "ticker": "MXRF11", "qtd": 59, "preco_medio": 9.93, "dividendo_mes": 5.90, "meta_cotas": 100 },
+    { "ticker": "GARE11", "qtd": 7,  "preco_medio": 9.10, "dividendo_mes": 0.70, "meta_cotas": null }
+  ],
+
+  "carteira_acoes": [
+    { "ticker": "KLBN4",  "qtd": 29, "preco_medio": 4.38,  "setor": "Papel/Celulose" },
+    { "ticker": "ITSA4",  "qtd": 11, "preco_medio": 9.92,  "setor": "Financeiro" },
+    { "ticker": "BBAS3",  "qtd": 3,  "preco_medio": 25.96, "setor": "Financeiro" },
+    { "ticker": "EGIE3",  "qtd": 4,  "preco_medio": 32.28, "setor": "Energia" },
+    { "ticker": "BBSE3",  "qtd": 2,  "preco_medio": 33.26, "setor": "Seguros" },
+    { "ticker": "TAEE11", "qtd": 2,  "preco_medio": 33.99, "setor": "Energia" },
+    { "ticker": "WEGE3",  "qtd": 1,  "preco_medio": 35.21, "setor": "Industrial" }
+  ],
+
+  "acoes_resumo": {
+    "valor_total": 647.59,
+    "rentabilidade_pct": 46.06,
+    "variacao_pct": 5.69
+  },
+
+  "orcamento": {
+    "renda_escolar": 2500.00,
+    "renda_freelas": 0.00,
+    "gastos_cartao": 2400.00
+  },
+
+  "freelas": {
+    "servicos_realizados": 0,
+    "faturado_2026": 0.00,
+    "canal": "WhatsApp"
+  },
+
+  "historico": [
+    {
+      "mes": "Mai/2026",
+      "caixinha_deposito": 100.00,
+      "caixinha_saldo": 100.00,
+      "mxrf11_cotas": 59,
+      "freelas_valor": 0.00,
+      "nota": "Caixinha criada. Estratégia definida com Claude."
+    }
+  ]
+}
