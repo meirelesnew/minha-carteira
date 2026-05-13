@@ -326,7 +326,7 @@ const io=new IntersectionObserver(entries=>{{entries.forEach((e,i)=>{{if(e.isInt
 document.querySelectorAll('.fade').forEach(el=>io.observe(el));
 const secs=document.querySelectorAll('section[id],header');
 const navs=document.querySelectorAll('.na');
-const sio=new IntersectionObserver(entries=>{{entries.forEach(e=>{{if(e.isIntersecting)navs.forEach(n=>n.classList.toggle('on',n.getAttribute('href')==='#'+e.target.id))}}))}},{{threshold:.4}});
+const sio=new IntersectionObserver(entries=>{{entries.forEach(e=>{{if(e.isIntersecting)navs.forEach(n=>n.classList.toggle('on',n.getAttribute('href')==='#'+e.target.id))}})}},{{threshold:.4}});
 secs.forEach(s=>sio.observe(s));
 </script>
 </body>
