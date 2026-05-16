@@ -209,6 +209,9 @@ footer a{color:var(--g);text-decoration:none;font-weight:500}
     <div class="fc"><div class="fl">Potencial</div><div class="fv">R$ 400+</div><div class="fd">por mês</div></div>
     <div class="fc"><div class="fl">Impacto</div><div class="fv" style="color:var(--g);font-size:20px">3× mais rápido</div><div class="fd">nas metas</div></div>
   </div>
+  <div class="lista" id="lista-freelas" style="margin-top:16px">
+    <div class="spin-wrap"><div class="spin"></div>Carregando freelas...</div>
+  </div>
 </section>
 
 <footer class="fade">
@@ -293,11 +296,20 @@ onSnapshot(collection(db,'contratos'), s => {
 });
 
 // FREELAS
-onSnapshot(collection(db,'freelas'), s => {
-  let total=0;
-  s.forEach(d => total += d.data().valor||0);
-  el('f-total').textContent = brl(total);
-  el('f-num').textContent = s.size;
+onSnapshot(query(collection(db,'freelas'),orderBy('data','desc')), s => {
+  let total=0, html='';
+  const lista = el('lista-freelas');
+  if(s.empty){ lista.innerHTML='<p style="color:var(--t2);padding:16px 0;font-size:14px">Nenhum freela registrado ainda.</p>'; }
+  else {
+    s.forEach(d => {
+      const f=d.data(); total+=f.valor||0;
+      const dt=f.data?.toDate?f.data.toDate().toLocaleDateString('pt-BR'):'';
+      html+=`<div class="item-card"><div><div class="item-titulo">${f.servico||'—'}</div><div class="item-sub">${f.cliente||'—'} · ${dt}</div></div><div class="item-val" style="color:var(--am)">${brl(f.valor)}</div></div>`;
+    });
+    lista.innerHTML=html;
+  }
+  el('f-total').textContent=brl(total);
+  el('f-num').textContent=s.size;
 });
 
 // Animações
