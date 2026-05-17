@@ -101,6 +101,15 @@ footer a{color:var(--g);text-decoration:none;font-weight:500}
 .fade{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
 .fade.on{opacity:1;transform:translateY(0)}
 .spin-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);padding:20px 0}
+.chance-bar-wrap{margin-top:10px}
+.chance-label{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:5px;font-weight:500}
+.chance-bar{height:5px;background:var(--f3);border-radius:99px;overflow:hidden}
+.chance-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.chance-fill.comprar{background:linear-gradient(90deg,#009973,#00C896)}
+.chance-fill.aguardar{background:linear-gradient(90deg,#b8860b,#FFD166)}
+.badge-ia{font-size:9px;color:var(--az);font-weight:600;letter-spacing:.08em;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.sinais-atualizado{font-size:11px;color:var(--t2);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+#muth-loading{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);padding:20px 0}
 .spin{width:16px;height:16px;border:2px solid var(--b);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 ::-webkit-scrollbar{width:5px}
@@ -154,10 +163,10 @@ footer a{color:var(--g);text-decoration:none;font-weight:500}
 </section>
 
 <section class="fade" id="sinais">
-  <div class="sh"><span class="sn">03 —</span><h2>Sinais de Mercado</h2></div>
+  <div class="sh"><span class="sn">03 —</span><h2>Sinais de Mercado <span class="badge-ia">🧠 Muth IA</span></h2></div>
   <div class="cenario-box">
     <div class="cenario-titulo">📡 Cenário Brasil — Maio/2026</div>
-    <div class="cenario-desc">Expectativa de queda gradual da Selic favorece FIIs e ações de dividendos. Cenário eleitoral gera incerteza no segundo semestre. Momento favorável para acumulação de bons ativos.</div>
+    <div class="cenario-desc">Expectativa de queda gradual da Selic favorece FIIs e ações de dividendos. Cenário eleitoral gera incerteza no segundo semestre. Sinais abaixo gerados pela rede neural Muth — treinada com 2 anos de dados históricos.</div>
     <div class="cenario-tags">
       <span class="ctag positivo">✅ Selic em queda</span>
       <span class="ctag positivo">✅ FIIs abaixo do VP</span>
@@ -165,14 +174,16 @@ footer a{color:var(--g);text-decoration:none;font-weight:500}
       <span class="ctag negativo">❌ Juros ainda altos</span>
     </div>
   </div>
-  <div class="sinais-grid">
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">MXRF11</div><div class="sinal-tipo">FII Papel</div></div><div class="sinal-badge sc">▲ COMPRAR</div></div><div class="sinal-motivo">FIIs descontados vs VP. Selic em queda. Yield ~10% muito atrativo.</div></div>
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">EGIE3</div><div class="sinal-tipo">Ação Energia</div></div><div class="sinal-badge sc">▲ COMPRAR</div></div><div class="sinal-motivo">Energia elétrica defensiva. Dividendos consistentes. Bom para longo prazo.</div></div>
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">TAEE11</div><div class="sinal-tipo">Ação Energia</div></div><div class="sinal-badge sc">▲ COMPRAR</div></div><div class="sinal-motivo">Transmissão com receita previsível. Ótimo pagador de dividendos.</div></div>
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">ITSA4</div><div class="sinal-tipo">Ação</div></div><div class="sinal-badge sm">● MANTER</div></div><div class="sinal-motivo">Holding Itaú sólida. Aguardar preço mais atrativo para novo aporte.</div></div>
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">BBAS3</div><div class="sinal-tipo">Ação</div></div><div class="sinal-badge sm">● MANTER</div></div><div class="sinal-motivo">Banco do Brasil paga bons dividendos. Risco político — monitorar.</div></div>
-    <div class="sinal-card"><div class="sinal-top"><div><div class="sinal-ticker">WEGE3</div><div class="sinal-tipo">Ação</div></div><div class="sinal-badge sm">● MANTER</div></div><div class="sinal-motivo">WEG excelente mas múltiplos elevados. Paciência para longo prazo.</div></div>
+  <div class="sinais-atualizado">
+    <div class="dot"></div>
+    <span id="muth-status">Carregando análise da IA...</span>
   </div>
+  <div id="muth-loading"><div class="spin"></div>Conectando ao Muth...</div>
+  <div class="sinais-grid" id="sinais-grid" style="display:none"></div>
+  <p style="font-size:11px;color:var(--t2);margin-top:16px;opacity:.6;font-style:italic">
+    * Previsões geradas pela rede neural Muth (TensorFlow). Não é recomendação de investimento.
+    Execute o <a href="https://github.com/meirelesnew/minha-carteira/blob/main/Muth.ipynb" target="_blank" style="color:var(--g)">Muth.ipynb</a> no Google Colab para atualizar os sinais.
+  </p>
 </section>
 
 <section class="fade" id="contratos">
@@ -216,7 +227,7 @@ footer a{color:var(--g);text-decoration:none;font-weight:500}
 
 <footer class="fade">
   <p>Jornada real — sem filtro, sem perfumaria.</p>
-  <p style="margin-top:8px">Dados em tempo real via <a href="https://firebase.google.com" target="_blank">Firebase</a> · Orientado pelo <a href="https://claude.ai" target="_blank">Claude</a> · <a href="https://github.com/meirelesnew/minha-carteira" target="_blank">GitHub</a></p>
+  <p style="margin-top:8px">Dados em tempo real via <a href="https://firebase.google.com" target="_blank">Firebase</a> · IA por <a href="https://github.com/meirelesnew/minha-carteira/blob/main/Muth.ipynb" target="_blank">Muth</a> · <a href="https://github.com/meirelesnew/minha-carteira" target="_blank">GitHub</a></p>
   <p class="fl2">Não é recomendação de investimento. Escolhas pessoais documentadas publicamente.</p>
 </footer>
 </div>
@@ -310,6 +321,67 @@ onSnapshot(query(collection(db,'freelas'),orderBy('data','desc')), s => {
   }
   el('f-total').textContent=brl(total);
   el('f-num').textContent=s.size;
+});
+
+// MUTH IA — previsões da rede neural em tempo real
+onSnapshot(collection(db,'previsoes_carteira'), s => {
+  const grid = document.getElementById('sinais-grid');
+  const loading = document.getElementById('muth-loading');
+  const status = document.getElementById('muth-status');
+
+  if(s.empty){
+    loading.innerHTML = '<p style="color:var(--t2);font-size:14px">Nenhuma previsão ainda. Execute o Muth.ipynb no Google Colab.</p>';
+    return;
+  }
+
+  // Ordenar por chance_subir decrescente
+  const dados = [];
+  s.forEach(d => dados.push(d.data()));
+  dados.sort((a,b) => b.chance_subir - a.chance_subir);
+
+  // Data da última análise
+  const ultima = dados.find(d => d.data_analise);
+  if(ultima) status.textContent = 'Última análise: '+ultima.data_analise+' · Muth Neural Network';
+
+  // Tipos dos ativos
+  const tipos = {
+    'MXRF11':'FII Papel','GARE11':'FII Logística',
+    'ITSA4':'Ação Financeiro','BBAS3':'Ação Financeiro',
+    'BBSE3':'Ação Seguros','EGIE3':'Ação Energia',
+    'TAEE11':'Ação Energia','KLBN4':'Ação Papel/Celulose','WEGE3':'Ação Industrial'
+  };
+
+  let html = '';
+  dados.forEach(d => {
+    const comprar = d.sinal === 'COMPRAR';
+    const chance = d.chance_subir || 0;
+    const badgeClass = comprar ? 'sc' : 'sm';
+    const badgeText = comprar ? '▲ COMPRAR' : '● AGUARDAR';
+    const fillClass = comprar ? 'comprar' : 'aguardar';
+    const tipo = tipos[d.ativo] || 'Ativo';
+    const motivo = comprar
+      ? `IA prevê ${chance}% de chance de alta amanhã. Sinal positivo.`
+      : `IA prevê ${chance}% de chance de alta. Aguardar melhor momento.`;
+
+    html += `<div class="sinal-card">
+      <div class="sinal-top">
+        <div>
+          <div class="sinal-ticker">${d.ativo}</div>
+          <div class="sinal-tipo">${tipo}</div>
+        </div>
+        <div class="sinal-badge ${badgeClass}">${badgeText}</div>
+      </div>
+      <div class="sinal-motivo">${motivo}</div>
+      <div class="chance-bar-wrap">
+        <div class="chance-label"><span>Chance de alta</span><span style="color:${comprar?'var(--g)':'var(--am)'}">${chance}%</span></div>
+        <div class="chance-bar"><div class="chance-fill ${fillClass}" style="width:${Math.min(chance,100)}%"></div></div>
+      </div>
+    </div>`;
+  });
+
+  grid.innerHTML = html;
+  grid.style.display = 'grid';
+  loading.style.display = 'none';
 });
 
 // Animações
