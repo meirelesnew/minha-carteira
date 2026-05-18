@@ -1,10 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Leitura pública — qualquer um pode ver a vitrine
     match /Carteira/{doc} {
       allow read: if true;
-      allow write: if true; // Simplificado — admin sem autenticação
+      allow write: if true;
     }
     match /gastos/{doc} {
       allow read: if true;
@@ -15,6 +14,11 @@ service cloud.firestore {
       allow write: if true;
     }
     match /freelas/{doc} {
+      allow read: if true;
+      allow write: if true;
+    }
+    // Muth v2 — previsões da rede neural
+    match /previsoes_carteira/{doc} {
       allow read: if true;
       allow write: if true;
     }
