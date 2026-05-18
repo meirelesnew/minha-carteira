@@ -70,9 +70,42 @@ body{background:var(--f);color:var(--t);font-family:var(--MM);min-height:100vh;-
 .spin{width:16px;height:16px;border:2px solid var(--b);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{font-size:14px;color:var(--t2);padding:20px 0;text-align:center}
+/* LOGIN */
+#tela-login{position:fixed;inset:0;background:var(--f);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px}
+#tela-login.hide{display:none}
+.login-logo{font-family:var(--TT);font-size:42px;font-weight:800;margin-bottom:8px;text-align:center}
+.login-logo span{color:var(--g)}
+.login-sub{font-size:14px;color:var(--t2);text-align:center;margin-bottom:48px;line-height:1.7}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:320px;padding:16px 24px;border-radius:12px;border:1px solid var(--b);background:var(--f2);color:var(--t);font-size:15px;font-weight:600;font-family:var(--MM);cursor:pointer;transition:border-color .2s,transform .1s}
+.btn-google:hover{border-color:var(--g)}
+.btn-google:active{transform:scale(.97)}
+.login-erro{font-size:13px;color:var(--vm);margin-top:16px;text-align:center;min-height:20px}
+.user-info{position:absolute;top:16px;right:60px;display:flex;align-items:center;gap:8px}
+.user-foto{width:28px;height:28px;border-radius:50%;border:1px solid var(--b)}
+.btn-sair{font-size:11px;color:var(--t2);background:none;border:1px solid var(--b);padding:4px 10px;border-radius:99px;cursor:pointer;font-family:var(--MM)}
+.btn-sair:hover{color:var(--vm);border-color:var(--vm)}
 </style>
 </head>
 <body>
+
+<!-- TELA DE LOGIN -->
+<div id="tela-login">
+  <div class="login-logo">Admin<br><span>Meireles</span></div>
+  <p class="login-sub">Painel privado de gestão financeira.<br>Acesso restrito ao proprietário.</p>
+  <button class="btn-google" onclick="fazerLogin()">
+    <svg style="width:20px;height:20px" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Entrar com Google
+  </button>
+  <div class="login-erro" id="login-erro"></div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app" style="display:none">
+<div class="user-info">
+  <img class="user-foto" id="user-foto" src="" alt="" onerror="this.style.display='none'">
+  <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+</div>
+
 
 <div class="header">
   <div class="header-titulo">Admin <span>Meireles</span></div>
@@ -193,13 +226,20 @@ body{background:var(--f);color:var(--t);font-family:var(--MM);min-height:100vh;-
 <div class="page" id="page-carteira">
   <div class="form-card">
     <div class="form-titulo">📈 Atualizar Carteira</div>
+    <div style="background:var(--f3);border-radius:8px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--t2)">
+      💡 MXRF11: digite só as cotas <strong style="color:var(--g)">compradas hoje</strong> — soma automática!
+    </div>
     <div class="campo-row">
-      <div class="campo"><label>Patrimônio (R$)</label><input type="number" id="c-pat" step="0.01" placeholder="1297.16"></div>
+      <div class="campo"><label>Patrimônio total (R$)</label><input type="number" id="c-pat" step="0.01" placeholder="1326.90"></div>
       <div class="campo"><label>Caixinha (R$)</label><input type="number" id="c-cx" step="0.01" placeholder="100"></div>
     </div>
     <div class="campo-row">
-      <div class="campo"><label>MXRF11 (cotas)</label><input type="number" id="c-mx" placeholder="59"></div>
-      <div class="campo"><label>Dividendos/mês</label><input type="number" id="c-div" step="0.01" placeholder="6.60"></div>
+      <div class="campo">
+        <label>+ Cotas compradas hoje</label>
+        <input type="number" id="c-mx-add" placeholder="ex: 7" min="0">
+        <div style="font-size:11px;color:var(--t2);margin-top:4px">Total atual: <span id="c-mx-total" style="color:var(--g);font-weight:600">carregando...</span></div>
+      </div>
+      <div class="campo"><label>Dividendos/mês (R$)</label><input type="number" id="c-div" step="0.01" placeholder="6.60"></div>
     </div>
     <button class="btn btn-verde" onclick="atualizarCarteira()">💾 Salvar Carteira</button>
   </div>
@@ -211,7 +251,8 @@ body{background:var(--f);color:var(--t);font-family:var(--MM);min-height:100vh;-
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, addDoc, setDoc, deleteDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, doc, onSnapshot, addDoc, setDoc, deleteDoc, updateDoc, getDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey:"AIzaSyAJyTeir6U4_AnqDuBzuKQ0ODIiihgpz4c",
@@ -222,6 +263,43 @@ const app = initializeApp({
   appId:"1:627335574111:web:b60443b1ac011f61b7a1ea"
 });
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// EMAIL AUTORIZADO — só você acessa
+const EMAIL_AUTORIZADO = 'meirelesnew@gmail.com';
+
+window.fazerLogin = async function(){
+  try{
+    const result = await signInWithPopup(auth, provider);
+    if(result.user.email !== EMAIL_AUTORIZADO){
+      await signOut(auth);
+      document.getElementById('login-erro').textContent = 'Acesso negado. Conta não autorizada.';
+    }
+  } catch(e){
+    document.getElementById('login-erro').textContent = 'Erro ao entrar: '+e.message;
+  }
+};
+
+window.fazerLogout = async function(){
+  await signOut(auth);
+};
+
+// Controla exibição baseado no login
+onAuthStateChanged(auth, user => {
+  const telaLogin = document.getElementById('tela-login');
+  const app = document.getElementById('app');
+  if(user && user.email === EMAIL_AUTORIZADO){
+    telaLogin.classList.add('hide');
+    app.style.display = 'block';
+    const foto = document.getElementById('user-foto');
+    if(foto && user.photoURL) foto.src = user.photoURL;
+    document.getElementById('hstatus').textContent = 'Online · '+user.displayName;
+  } else {
+    telaLogin.classList.remove('hide');
+    app.style.display = 'none';
+  }
+});
 
 const brl = v => 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const el = id => document.getElementById(id);
@@ -260,13 +338,15 @@ onSnapshot(doc(db,'Carteira','Dados'), s => {
   el('carteira-atual').innerHTML =
     `Patrimônio: <strong style="color:var(--g)">${brlFn(d.patrimonio)}</strong><br>` +
     `Caixinha: <strong style="color:var(--g)">${brlFn(d.caixinha_saldo)}</strong><br>` +
-    `MXRF11: <strong style="color:var(--am)">${d.mxrf11||0} cotas</strong><br>` +
+    `MXRF11: <strong style="color:var(--am)">${d.mxrf11||0} cotas</strong> (faltam ${100-(d.mxrf11||0)} para a meta)<br>` +
     `Dividendos/mês: <strong style="color:var(--g)">${brlFn(d.dividendos_mes)}</strong>`;
   el('hstatus').textContent = 'Online';
   el('c-pat').value = d.patrimonio||'';
   el('c-cx').value = d.caixinha_saldo||'';
-  el('c-mx').value = d.mxrf11||'';
   el('c-div').value = d.dividendos_mes||'';
+  // Mostrar total atual de cotas
+  const totalEl = document.getElementById('c-mx-total');
+  if(totalEl) totalEl.textContent = (d.mxrf11||0) + ' cotas';
 });
 
 // GASTOS
@@ -302,7 +382,11 @@ onSnapshot(query(collection(db,'freelas'),orderBy('data','desc')), s => {
   s.forEach(d => {
     const f = d.data(); total += f.valor||0;
     const dt = f.data?.toDate ? f.data.toDate().toLocaleDateString('pt-BR') : '';
-    html += `<div class="item"><div class="item-esq"><div class="titulo">${f.servico||'—'}</div><div class="sub">${f.cliente||'—'} · ${dt}</div></div><div style="display:flex;align-items:center;gap:8px"><div class="item-val" style="color:var(--am)">${brl(f.valor)}</div><button class="btn-excluir" onclick="excluir('freelas','${d.id}')">🗑</button></div></div>`;
+    const fpago = f.status === 'recebido';
+    const fBadge = fpago
+      ? `<div class="badge-pago" style="cursor:pointer" onclick="toggleStatus('freelas','${d.id}','recebido')">✅ Recebido</div>`
+      : `<div class="badge-pend" style="cursor:pointer" onclick="toggleStatus('freelas','${d.id}','pendente')">⏳ Pendente — toque para marcar como pago</div>`;
+    html += `<div class="item"><div class="item-esq"><div class="titulo">${f.servico||'—'}</div><div class="sub">${f.cliente||'—'} · ${dt}</div>${fBadge}</div><div style="display:flex;align-items:center;gap:8px"><div class="item-val" style="color:var(--am)">${brl(f.valor)}</div><button class="btn-excluir" onclick="excluir('freelas','${d.id}')">🗑</button></div></div>`;
   });
   lista.innerHTML = html; el('r-fre').textContent = brl(total);
 });
@@ -343,13 +427,22 @@ window.salvarFreela = async function(){
 
 window.atualizarCarteira = async function(){
   try{
+    // Busca o total atual de cotas e soma com as novas
+    const snap = await getDoc(doc(db,'Carteira','Dados'));
+    const cotasAtuais = snap.exists() ? (snap.data().mxrf11||0) : 0;
+    const cotasAdicionadas = parseInt(el('c-mx-add').value)||0;
+    const novoTotal = cotasAtuais + cotasAdicionadas;
+
     await setDoc(doc(db,'Carteira','Dados'),{
-      patrimonio:parseFloat(el('c-pat').value)||0,
+      patrimonio:    parseFloat(el('c-pat').value)||0,
       caixinha_saldo:parseFloat(el('c-cx').value)||0,
-      mxrf11:parseInt(el('c-mx').value)||0,
+      mxrf11:        novoTotal,
       dividendos_mes:parseFloat(el('c-div').value)||0
     });
-    toast('✅ Carteira atualizada!');
+
+    el('c-mx-add').value = '';
+    el('c-mx-total').textContent = novoTotal + ' cotas';
+    toast('✅ Carteira atualizada! MXRF11: '+novoTotal+' cotas');
   } catch(e){ toast('Erro: '+e.message,true); }
 };
 
@@ -360,10 +453,20 @@ window.excluir = async function(col, id){
 };
 
 window.toggleStatus = async function(col, id, atual){
-  const novo = atual==='pago'?'pendente':'pago';
-  try{ await updateDoc(doc(db,col,id),{status:novo}); toast('Status atualizado!'); }
-  catch(e){ toast('Erro: '+e.message,true); }
+  // Contratos: pago <-> pendente | Freelas: recebido <-> pendente
+  let novo;
+  if(col === 'freelas'){
+    novo = atual === 'recebido' ? 'pendente' : 'recebido';
+  } else {
+    novo = atual === 'pago' ? 'pendente' : 'pago';
+  }
+  try{
+    await updateDoc(doc(db,col,id),{status:novo});
+    toast(novo === 'recebido' || novo === 'pago' ? '✅ Marcado como pago!' : '⏳ Marcado como pendente');
+  } catch(e){ toast('Erro: '+e.message,true); }
 };
 </script>
+</div><!-- /app -->
+</div><!-- /app -->
 </body>
 </html>
