@@ -1,0 +1,27 @@
+name: Executar IA Muth v2 Automaticamente
+
+on:
+  schedule:
+    # Roda a cada 6 horas (00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Permite que você também clique em um botão para rodar manualmente se quiser
+
+jobs:
+  rodar-ia:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Copiar os arquivos do repositório
+      uses: actions/checkout@v3
+
+    - name: Configurar o Python no servidor
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Instalar as bibliotecas de IA e Finanças
+      run: |
+        pip install yfinance tensorflow numpy requests
+
+    - name: Executar a Rede Neural
+      run: python executar_ia.py
