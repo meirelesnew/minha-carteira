@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import requests
 import warnings
+from analise_sentimento import obter_score_fundamentalista
 import os
 import sys
 
@@ -39,7 +40,7 @@ ALVO_MIN_ALTA = 0.002
 EPOCAS_MAX    = 150
 BATCH_SIZE    = 16
 PERIODO_DADOS = '2y'
-FEATURES      = ['Variacao','MM_ratio','Vol_norm','Volatilidade','RSI','Momentum10','Momentum5']
+FEATURES      = ['Variacao','MM_ratio','Vol_norm','Volatilidade','RSI','Momentum10','Momentum5', 'Sentimento']
 
 # ============================================================
 # FUNÇÕES
@@ -78,6 +79,7 @@ def treinar_e_prever(ticker):
             df_raw.columns = df_raw.columns.get_level_values(0)
 
         df = df_raw[['Close', 'Volume']].copy()
+        df["Sentimento"] = obter_score_fundamentalista(ticker)
         df['Volume'] = df['Volume'].astype(float)
         print(f'   Dados: {len(df)} dias ({df.index[0].date()} → {df.index[-1].date()})')
 
@@ -102,8 +104,16 @@ def treinar_e_prever(ticker):
 
     n_tr  = int(len(X) * 0.80)
     n_pos = y[:n_tr].sum()
+    if len(X) == 0:
+        print(f'   ⚠️  Dados insuficientes para treino/teste após janela para {nome}')
+        return None
+
     n_neg = n_tr - n_pos
     cw    = {0: 1.0, 1: max(1.0, float(n_neg) / (float(n_pos) + 1e-10))}
+
+    if X.shape[0] == 0 or X.shape[1] == 0 or X.shape[2] == 0:
+        print(f'   ⚠️  Dados de entrada para o modelo LSTM inválidos para {nome}')
+        return None
 
     model = models.Sequential([
         layers.Input(shape=(JANELA, len(FEATURES))),
